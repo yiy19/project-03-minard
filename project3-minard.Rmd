@@ -5,10 +5,6 @@ date: "3/3/2021"
 output: html_document
 ---
 
-Recreate the Minard map more precisely.
-Add text for the number of troops surviving on each segment,
-and add the time and temperature data to the bottom of the plot.
-
 ```{r packages, eval = FALSE}
 install.packages("HistData")
 ```
@@ -32,11 +28,6 @@ head(minard_temp)
 ```{r minard-given-plots}
 # plot the troop advancement and retreat
 (plot_troops = ggplot(minard_troops) +
-                      geom_path(aes(x = long, y = lat,
-                                    color = direction,
-                                    size = survivors,
-                                    group = group)))
-(plot_troops_2 = ggplot(minard_troops) +
                       geom_path(aes(x = long, y = lat,
                                     color = direction,
                                     size = survivors,
@@ -88,5 +79,4 @@ ggplot() +
     theme(axis.text = element_blank(),        # remove text from the axis
           axis.ticks = element_blank(),       # remove ticks (little lines sticking out of the axis)
           panel.grid = element_blank())       # remove panel grid in the plot
-
 ```
