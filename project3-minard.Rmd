@@ -1,0 +1,92 @@
+---
+title: "Project 3 Minard"
+author: "Ye Dam Yi"
+date: "3/3/2021"
+output: html_document
+---
+
+Recreate the Minard map more precisely.
+Add text for the number of troops surviving on each segment,
+and add the time and temperature data to the bottom of the plot.
+
+```{r packages, eval = FALSE}
+install.packages("HistData")
+```
+
+```{r setup}
+library(tidyverse)
+library(HistData)
+help(HistData)
+```
+
+```{r data}
+minard_cities <-  Minard.cities
+minard_troops <- Minard.troops
+minard_temp <- Minard.temp
+
+head(minard_troops)
+head(minard_cities)
+head(minard_temp)
+```
+
+```{r minard-given-plots}
+# plot the troop advancement and retreat
+(plot_troops = ggplot(minard_troops) +
+                      geom_path(aes(x = long, y = lat,
+                                    color = direction,
+                                    size = survivors,
+                                    group = group)))
+(plot_troops_2 = ggplot(minard_troops) +
+                      geom_path(aes(x = long, y = lat,
+                                    color = direction,
+                                    size = survivors,
+                                    group = group)))
+
+# geom_path lets you explore how two variables are related over time,
+# e.g. unemployment and personal savings rate
+# m <- ggplot(economics, aes(unemploy/pop, psavert))
+# m + geom_path()
+# m + geom_path(aes(colour = as.numeric(date)))
+
+# add the city layer
+(plot_both = plot_troops +
+              geom_text(aes(x = long, y = lat, label = city),
+              data = minard_cities, size = 3))                # data from minard_cities
+
+
+# implement the following:
+# colors for advance and retreat to be gray and red
+# line widths to be proportional to the number of survivors
+# line ends to be round instead of square
+
+minard_troops %>% 
+ggplot() +
+    geom_path(aes(x = long, 
+                  y = lat, 
+                  color = direction, 
+                  size = survivors^2, 
+                  group = group), 
+              lineend = "round") +            # line end to be round (lineend = "round")
+    geom_text(aes(x = long,
+                  y = lat,
+                  label = city),
+              data = minard_cities, 
+              size = 3) + 
+    scale_size(range = c(.18, 15),            # range specifies the size of the plotting symbol (path here)
+               breaks = (1:3 * 10^5)^2,       # breaks specifies the size breaks of the plotting symbol
+               labels = 
+                 scales::comma(1:3 * 10^5),   # label for sizes
+                 "Survivors") +
+    scale_color_manual(values = c("grey50",   # set the color of the path to grey and red
+                                  "red"), 
+                       breaks = c("A",        # "break" the color depending on the direction
+                                  "R"), 
+                       labels = c("Advance",  # label for color levels
+                                  "Retreat"),
+                       "") +
+    xlab(NULL) + ylab(NULL) +
+    theme(axis.text = element_blank(),        # remove text from the axis
+          axis.ticks = element_blank(),       # remove ticks (little lines sticking out of the axis)
+          panel.grid = element_blank())       # remove panel grid in the plot
+
+```
