@@ -50,7 +50,7 @@ head(minard_temp)
 # line widths to be proportional to the number of survivors
 # line ends to be round instead of square
 
-minard_troops %>% 
+minard <- minard_troops %>% 
 ggplot() +
     geom_path(aes(x = long, 
                   y = lat, 
@@ -79,4 +79,16 @@ ggplot() +
     theme(axis.text = element_blank(),        # remove text from the axis
           axis.ticks = element_blank(),       # remove ticks (little lines sticking out of the axis)
           panel.grid = element_blank())       # remove panel grid in the plot
+minard
+```
+
+
+```{r refined-minard}
+# Recreate the Minard map more precisely.
+
+
+
+# Add text for the number of troops surviving on each segment,
+# and add the time and temperature data to the bottom of the plot.
+
 ```
