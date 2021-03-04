@@ -6,6 +6,7 @@ output: html_document
 ---
 ```{r install.packages, eval= FALSE}
 install.packages("ggpubr")
+install.packages("gridExtra")
 
 ```
 ```{r setup}
@@ -14,6 +15,7 @@ require(HistData)
 help(HistData)
 require(extrafont)
 library(ggpubr)
+library(gridExtra)
 
 ```
 
@@ -85,7 +87,7 @@ minard
 ```
 
 
-```{r refined-minard, fig.height=5, fig.width=10}
+```{r refined-minard, fig.height=3.5, fig.width=10}
 # Recreate the Minard map more precisely.
 minard <- minard_troops %>% 
 ggplot() +
@@ -116,6 +118,7 @@ ggplot() +
                        labels = c("Advance",  # label for color levels
                                   "Retreat"),
                        "") +
+  guides(color = FALSE, size = FALSE) + 
     xlab(NULL) + ylab(NULL) +
     theme(axis.text = element_blank(),        # remove text from the axis
           axis.ticks = element_blank(),       # remove ticks (little lines sticking out of the axis)
@@ -161,21 +164,27 @@ tempdateplot <- minard_temp %>%
   geom_text(mapping = aes(label = tempdate, family = "sans"), size = 2, show.legend = FALSE, vjust = 2, hjust = -.005) + 
   scale_y_continuous(limits = c(-40, 0), position = "right") +
   scale_x_continuous(breaks = NULL) +
-  labs(y = "Temperature & Date",
+  labs(y = "Temperature",
       x = NULL) +
   xlab(NULL) +
+  theme_bw() + 
       theme(    
           axis.ticks = element_blank(),       # remove ticks (little lines sticking out of the axis)
-          panel.grid.major.y = element_line()) 
+          panel.grid.major.x = element_blank(),
+          panel.grid.minor.x = element_blank(),
+          panel.border = element_blank(),
+          panel.grid.minor.y = element_blank()
+      )
 tempdateplot
 
 ```
 
-```{r join-plots, eval - FALSE}
+```{r join-plots, fig.width = 10, fig.height = 5}
 # join two plots
-minard_final <- ggarrange(minard_surv, tempdateplot,
+minard_final <- grid.arrange(minard_surv, tempdateplot,
                           ncol = 1,
-                          nrow = 2)
+                          nrow = 2,
+                          heights = c(3.7, 1.3))
 minard_final
 
 ```
